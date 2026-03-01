@@ -1,10 +1,9 @@
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>English Trainer</title>
+<title>English Trainer – Real Life Probability</title>
 <style>
 body{
     font-family: Arial, sans-serif;
@@ -14,15 +13,16 @@ body{
 header{
     background:#111;
     color:white;
-    padding:15px;
+    padding:18px;
     text-align:center;
+    font-size:22px;
 }
 .container{
     max-width:800px;
     margin:20px auto;
     background:white;
-    padding:20px;
-    border-radius:10px;
+    padding:25px;
+    border-radius:12px;
     box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 .question{
@@ -31,130 +31,104 @@ header{
 select{
     padding:8px;
     font-size:16px;
-    margin-top:5px;
+    margin-top:8px;
 }
 button{
     padding:10px 15px;
     font-size:16px;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
-    margin-right:10px;
-}
-.check{
+    margin-top:15px;
     background:#111;
     color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
 }
-.reset{
-    background:#ddd;
+button:hover{
+    background:#333;
 }
 .result{
+    margin-top:5px;
     font-weight:bold;
-    margin-top:10px;
 }
 .correct{color:green;}
 .wrong{color:red;}
+#score{
+    margin-top:20px;
+    font-size:18px;
+    font-weight:bold;
+}
 </style>
 </head>
-
 <body>
 
 <header>
-<h2>English Trainer – Probability Quiz</h2>
+English Trainer – Real UK Probability Situations
 </header>
 
+<div class="container" id="quiz"></div>
 <div class="container">
-
-<div class="question">
-1. It will ____ rain tomorrow.
-<br>
-<select id="q1">
-<option value="">Choose</option>
-<option>maybe</option>
-<option>probably</option>
-<option>perhaps</option>
-</select>
-</div>
-
-<div class="question">
-2. She is ____ to win than her sister.
-<br>
-<select id="q2">
-<option value="">Choose</option>
-<option>likely</option>
-<option>more likely</option>
-<option>most likely</option>
-</select>
-</div>
-
-<div class="question">
-3. He will ____ be late – traffic is terrible.
-<br>
-<select id="q3">
-<option value="">Choose</option>
-<option>most likely</option>
-<option>maybe</option>
-<option>perhaps</option>
-</select>
-</div>
-
-<div class="question">
-4. ____ we should leave earlier.
-<br>
-<select id="q4">
-<option value="">Choose</option>
-<option>perhaps</option>
-<option>probably</option>
-<option>most likely</option>
-</select>
-</div>
-
-<div class="question">
-5. It is ____ that they will cancel the meeting.
-<br>
-<select id="q5">
-<option value="">Choose</option>
-<option>likely</option>
-<option>maybe</option>
-<option>perhaps</option>
-</select>
-</div>
-
-<button class="check" onclick="checkAnswers()">Check</button>
-<button class="reset" onclick="resetQuiz()">Reset</button>
-
-<div id="result" class="result"></div>
-
+<button onclick="checkAnswers()">Check Answers</button>
+<div id="score"></div>
 </div>
 
 <script>
+
+const questions = [
+{q:"It’s dark clouds over Belfast. It will ____ rain soon.",options:["maybe","probably","perhaps"],a:"probably"},
+{q:"Traffic on the M2 is terrible. He will ____ be late for work.",options:["probably","perhaps","most likely"],a:"most likely"},
+{q:"She studies every night. She is ____ to pass her exam.",options:["likely","maybe","perhaps"],a:"likely"},
+{q:"We’re out of milk. ____ we should stop at Tesco.",options:["perhaps","likely","most likely"],a:"perhaps"},
+{q:"He never answers his phone. He’s ____ ignoring us.",options:["probably","perhaps","likely"],a:"probably"},
+{q:"If you keep training, you are ____ to improve.",options:["likely","maybe","perhaps"],a:"likely"},
+{q:"It’s Friday night. The pub will ____ be busy.",options:["probably","most likely","perhaps"],a:"most likely"},
+{q:"I left my wallet at home. I ____ left it on the kitchen table.",options:["probably","likely","most likely"],a:"probably"},
+{q:"She applied for 20 jobs. She’s ____ to get at least one interview.",options:["likely","maybe","perhaps"],a:"likely"},
+{q:"The meeting might be cancelled. It’s ____ that they change the plan.",options:["likely","maybe","perhaps"],a:"likely"},
+{q:"He didn’t reply all day. He’s ____ upset.",options:["probably","perhaps","most likely"],a:"probably"},
+{q:"It’s snowing in March. That’s ____ unusual.",options:["likely","most likely","perhaps"],a:"perhaps"},
+{q:"The train is delayed again. It will ____ arrive late.",options:["probably","likely","most likely"],a:"probably"},
+{q:"She’s been practising driving. She is ____ more confident now.",options:["probably","likely","perhaps"],a:"probably"},
+{q:"He missed three classes. He is ____ to fail the test.",options:["likely","maybe","perhaps"],a:"likely"},
+{q:"The forecast says 90% rain. It will ____ rain all day.",options:["probably","most likely","perhaps"],a:"most likely"},
+{q:"They haven’t confirmed yet. ____ they’ll call tomorrow.",options:["Perhaps","Likely","Most likely"],a:"Perhaps"},
+{q:"She’s always early. She will ____ arrive before everyone else.",options:["probably","likely","perhaps"],a:"probably"},
+{q:"The shop closes at 6. We are ____ too late.",options:["likely","perhaps","most likely"],a:"likely"},
+{q:"He’s been coughing all week. He is ____ ill.",options:["probably","likely","perhaps"],a:"probably"}
+];
+
+const quiz=document.getElementById("quiz");
+
+questions.forEach((item,i)=>{
+    const div=document.createElement("div");
+    div.classList.add("question");
+    div.innerHTML=`
+    <p><strong>${i+1}. ${item.q}</strong></p>
+    <select id="q${i}">
+        <option value="">Choose</option>
+        ${item.options.map(o=>`<option value="${o}">${o}</option>`).join("")}
+    </select>
+    <div id="r${i}" class="result"></div>
+    `;
+    quiz.appendChild(div);
+});
+
 function checkAnswers(){
     let score=0;
-
-    if(document.getElementById("q1").value==="probably") score++;
-    if(document.getElementById("q2").value==="more likely") score++;
-    if(document.getElementById("q3").value==="most likely") score++;
-    if(document.getElementById("q4").value==="perhaps") score++;
-    if(document.getElementById("q5").value==="likely") score++;
-
-    let result=document.getElementById("result");
-    result.innerHTML="Score: "+score+"/5";
-
-    if(score===5){
-        result.className="result correct";
-    } else {
-        result.className="result wrong";
-    }
+    questions.forEach((item,i)=>{
+        const user=document.getElementById("q"+i).value;
+        const result=document.getElementById("r"+i);
+        if(user===item.a){
+            score++;
+            result.innerHTML="Correct";
+            result.className="result correct";
+        }else{
+            result.innerHTML="Wrong. Correct: "+item.a;
+            result.className="result wrong";
+        }
+    });
+    document.getElementById("score").innerHTML="Score: "+score+" / "+questions.length;
 }
 
-function resetQuiz(){
-    document.getElementById("q1").value="";
-    document.getElementById("q2").value="";
-    document.getElementById("q3").value="";
-    document.getElementById("q4").value="";
-    document.getElementById("q5").value="";
-    document.getElementById("result").innerHTML="";
-}
 </script>
 
 </body>
