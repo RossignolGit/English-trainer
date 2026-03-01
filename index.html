@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Trainer</title>
+<style>
+body{
+    font-family: Arial, sans-serif;
+    margin:0;
+    background:#f4f6f8;
+}
+header{
+    background:#111;
+    color:white;
+    padding:15px;
+    text-align:center;
+}
+.container{
+    max-width:800px;
+    margin:20px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+.question{
+    margin-bottom:20px;
+}
+select{
+    padding:8px;
+    font-size:16px;
+    margin-top:5px;
+}
+button{
+    padding:10px 15px;
+    font-size:16px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    margin-right:10px;
+}
+.check{
+    background:#111;
+    color:white;
+}
+.reset{
+    background:#ddd;
+}
+.result{
+    font-weight:bold;
+    margin-top:10px;
+}
+.correct{color:green;}
+.wrong{color:red;}
+</style>
+</head>
+
+<body>
+
+<header>
+<h2>English Trainer – Probability Quiz</h2>
+</header>
+
+<div class="container">
+
+<div class="question">
+1. It will ____ rain tomorrow.
+<br>
+<select id="q1">
+<option value="">Choose</option>
+<option>maybe</option>
+<option>probably</option>
+<option>perhaps</option>
+</select>
+</div>
+
+<div class="question">
+2. She is ____ to win than her sister.
+<br>
+<select id="q2">
+<option value="">Choose</option>
+<option>likely</option>
+<option>more likely</option>
+<option>most likely</option>
+</select>
+</div>
+
+<div class="question">
+3. He will ____ be late – traffic is terrible.
+<br>
+<select id="q3">
+<option value="">Choose</option>
+<option>most likely</option>
+<option>maybe</option>
+<option>perhaps</option>
+</select>
+</div>
+
+<div class="question">
+4. ____ we should leave earlier.
+<br>
+<select id="q4">
+<option value="">Choose</option>
+<option>perhaps</option>
+<option>probably</option>
+<option>most likely</option>
+</select>
+</div>
+
+<div class="question">
+5. It is ____ that they will cancel the meeting.
+<br>
+<select id="q5">
+<option value="">Choose</option>
+<option>likely</option>
+<option>maybe</option>
+<option>perhaps</option>
+</select>
+</div>
+
+<button class="check" onclick="checkAnswers()">Check</button>
+<button class="reset" onclick="resetQuiz()">Reset</button>
+
+<div id="result" class="result"></div>
+
+</div>
+
+<script>
+function checkAnswers(){
+    let score=0;
+
+    if(document.getElementById("q1").value==="probably") score++;
+    if(document.getElementById("q2").value==="more likely") score++;
+    if(document.getElementById("q3").value==="most likely") score++;
+    if(document.getElementById("q4").value==="perhaps") score++;
+    if(document.getElementById("q5").value==="likely") score++;
+
+    let result=document.getElementById("result");
+    result.innerHTML="Score: "+score+"/5";
+
+    if(score===5){
+        result.className="result correct";
+    } else {
+        result.className="result wrong";
+    }
+}
+
+function resetQuiz(){
+    document.getElementById("q1").value="";
+    document.getElementById("q2").value="";
+    document.getElementById("q3").value="";
+    document.getElementById("q4").value="";
+    document.getElementById("q5").value="";
+    document.getElementById("result").innerHTML="";
+}
+</script>
+
+</body>
+</html>
